@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel | S Gadget & Electronics</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f1f5f9;
+      color: #172033;
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .login-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #101b35, #155e75);
+    }
+
+    .login-box {
+      background: white;
+      width: 100%;
+      max-width: 380px;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 15px 40px #0003;
+    }
+
+    .logo {
+      color: #087f70;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #64748b;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin: 14px 0 7px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      outline: none;
+      background: white;
+    }
+
+    input:focus {
+      border-color: #0d9488;
+    }
+
+    .btn {
+      border: none;
+      padding: 11px 15px;
+      border-radius: 7px;
+      background: #0d9488;
+      color: white;
+      font-weight: bold;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    .full {
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .error {
+      color: #dc2626;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    .layout {
+      min-height: 100vh;
+      display: flex;
+    }
+
+    aside {
+      width: 230px;
+      flex-shrink: 0;
+      background: #101b35;
+      color: white;
+      padding: 24px 15px;
+    }
+
+    aside h2 {
+      color: #36d7b7;
+      font-size: 20px;
+      margin-bottom: 7px;
+    }
+
+    aside p {
+      color: #cbd5e1;
+      font-size: 12px;
+      margin-bottom: 30px;
+    }
+
+    .nav-btn {
+      width: 100%;
+      padding: 13px;
+      text-align: left;
+      border: none;
+      background: transparent;
+      color: white;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .nav-btn:hover,
+    .nav-btn.active {
+      background: #263653;
+    }
+
+    main {
+      flex: 1;
+      min-width: 0;
+      padding: 25px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .topbar h1 {
+      font-size: 24px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .stat-card, .panel {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 3px 12px #00000008;
+    }
+
+    .stat-card p {
+      color: #64748b;
+      margin-bottom: 12px;
+    }
+
+    .stat-card h2 {
+      font-size: 25px;
+      color: #087f70;
+      overflow-wrap: anywhere;
+    }
+
+    .panel h2 {
+      font-size: 19px;
+      margin-bottom: 20px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 15px;
+    }
+
+    .form-grid .wide {
+      grid-column: 1 / -1;
+    }
+
+    .form-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .secondary {
+      background: #64748b;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 540px;
+    }
+
+    th, td {
+      padding: 13px 10px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f8fafc;
+    }
+
+    .actions {
+      display: flex;
+      gap: 7px;
+    }
+
+    .edit {
+      background: #2563eb;
+      padding: 7px 10px;
+    }
+
+    .delete {
+      background: #dc2626;
+      padding: 7px 10px;
+    }
+
+    .notice {
+      margin-top: 15px;
+      font-size: 13px;
+      color: #64748b;
+      line-height: 1.7;
+    }
+
+    .empty {
+      padding: 20px 0;
+      color: #64748b;
+    }
+
+    @media (max-width: 760px) {
+      .layout {
+        display: block;
+      }
+
+      aside {
+        width: 100%;
+        padding: 17px;
+      }
+
+      aside p {
+        margin-bottom: 15px;
+      }
+
+      .nav-btn {
+        width: auto;
+        margin: 0 4px 4px 0;
+        padding: 10px;
+      }
+
+      main {
+        padding: 16px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-grid .wide {
+        grid-column: auto;
+      }
+
+      .topbar h1 {
+        font-size: 21px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ADMIN LOGIN -->
+  <section id="login-page" class="login-page">
+    <div class="login-box">
+      <h2 class="logo">S Gadget & Electronics</h2>
+      <p class="subtitle">Administrator Login</p>
+
+      <form id="login-form">
+        <label for="username">Admin Username</label>
+        <input id="username" autocomplete="username"
+          placeholder="Username" required>
+
+        <label for="password">Password</label>
+        <input id="password" type="password"
+          autocomplete="current-password"
+          placeholder="Password" required>
+
+        <button class="btn full" type="submit">Login</button>
+        <p id="login-error" class="error" role="alert"></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ADMIN DASHBOARD -->
+  <div id="dashboard" class="layout hidden">
+
+    <aside>
+      <h2>S Gadget</h2>
+      <p>Admin Control Panel</p>
+
+      <button class="nav-btn active" data-page="overview">
+        📊 Dashboard
+      </button>
+
+      <button class="nav-btn" data-page="manage">
+        📦 Manage Products
+      </button>
+
+      <button class="nav-btn" id="logout-btn">
+        🚪 Logout
+      </button>
+    </aside>
+
+    <main>
+      <div class="topbar">
+        <div>
+          <h1 id="page-title">Dashboard</h1>
+          <p style="color:#64748b;margin-top:7px">
+            S Gadget & Electronics Management
+          </p>
+        </div>
+        <span>👤 Administrator</span>
+      </div>
+
+      <!-- OVERVIEW -->
+      <section id="overview-page">
+        <div class="cards">
+          <div class="stat-card">
+            <p>মোট প্রোডাক্ট</p>
+            <h2 id="product-count">0</h2>
+          </div>
+
+          <div class="stat-card">
+            <p>মোট ইউনিট স্টক</p>
+            <h2 id="stock-count">0</h2>
+          </div>
+
+          <div class="stat-card">
+            <p>প্রোডাক্টের মোট মূল্য</p>
+            <h2 id="inventory-value">৳ 0</h2>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>স্বাগতম, Admin!</h2>
+          <p>
+            এই প্যানেল থেকে প্রোডাক্ট যোগ, সম্পাদনা ও ডিলিট করতে পারবে।
+          </p>
+          <button class="btn" style="margin-top:18px"
+            id="go-manage">
+            প্রোডাক্ট ম্যানেজ করো
+          </button>
+        </div>
+      </section>
+
+      <!-- PRODUCT MANAGEMENT -->
+      <section id="manage-page" class="hidden">
+
+        <div class="panel" style="margin-bottom:22px">
+          <h2 id="form-title">➕ নতুন প্রোডাক্ট যোগ করো</h2>
+
+          <form id="product-form">
+            <input id="edit-id" type="hidden">
+
+            <div class="form-grid">
+              <div>
+                <label for="product-name">প্রোডাক্টের নাম</label>
+                <input id="product-name"
+                  placeholder="যেমন: Smart Watch" required>
+              </div>
+
+              <div>
+                <label for="product-price">দাম (টাকা)</label>
+                <input id="product-price" type="number"
+                  min="0.01" step="0.01"
+                  placeholder="যেমন: 1800" required>
+              </div>
+
+              <div>
+                <label for="product-stock">স্টক সংখ্যা</label>
+                <input id="product-stock" type="number"
+                  min="0" step="1" value="1" required>
+              </div>
+
+              <div class="wide">
+                <label for="product-image">ছবির URL</label>
+                <input id="product-image" type="url"
+                  placeholder="https://example.com/image.jpg">
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn" id="save-btn">
+                প্রোডাক্ট সেভ করো
+              </button>
+
+              <button type="button" class="btn secondary hidden"
+                id="cancel-edit">
+                বাতিল
+              </button>
+            </div>
+          </form>
+
+          <p id="form-message" class="notice" role="status"></p>
+        </div>
+
+        <div class="panel">
+          <h2>📦 প্রোডাক্ট তালিকা</h2>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>নাম</th>
+                  <th>দাম</th>
+                  <th>স্টক</th>
+                  <th>অ্যাকশন</th>
+                </tr>
+              </thead>
+              <tbody id="product-list"></tbody>
+            </table>
+          </div>
+
+          <p id="empty-message" class="empty hidden">
+            এখনো কোনো প্রোডাক্ট যোগ করা হয়নি।
+          </p>
+
+          <p class="notice">
+            নোট: এই সংস্করণে ডেটা এই ব্রাউজারের localStorage-এ
+            রাখা হয়। এটি SQL Database নয়।
+          </p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    /*
+      DEMO ONLY:
+      Browser-side login is not secure for a real website.
+      Never use this method for production authentication.
+    */
+
+    const DEMO_USERNAME = "SalmanAdmin";
+    const DEMO_PASSWORD = "Admin1234";
+
+    const STORAGE_KEY = "sgadget_products_v1";
+
+    const $ = id => document.getElementById(id);
+
+    let products = loadProducts();
+
+    function loadProducts() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        const parsed = saved ? JSON.parse(saved) : [];
+
+        if (!Array.isArray(parsed)) return [];
+
+        return parsed.filter(p =>
+          p &&
+          typeof p.id === "string" &&
+          typeof p.name === "string" &&
+          Number.isFinite(p.price) &&
+          Number.isFinite(p.stock)
+        );
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function saveProducts() {
+      try {
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify(products)
+        );
+        return true;
+      } catch (error) {
+        alert("ডেটা সেভ করা যায়নি। ব্রাউজারের স্টোরেজ পরীক্ষা করো।");
+        return false;
+      }
+    }
+
+    function money(amount) {
+      return "৳ " + amount.toLocaleString("en-BD");
+    }
+
+    $("login-form").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const username = $("username").value.trim();
+      const password = $("password").value;
+
+      if (
+        username === DEMO_USERNAME &&
+        password === DEMO_PASSWORD
+      ) {
+        $("login-error").textContent = "";
+        $("login-page").classList.add("hidden");
+        $("dashboard").classList.remove("hidden");
+        renderProducts();
+        showPage("overview");
+      } else {
+        $("login-error").textContent =
+          "Username অথবা Password সঠিক নয়!";
+      }
+    });
+
+    function logout() {
+      $("dashboard").classList.add("hidden");
+      $("login-page").classList.remove("hidden");
+      $("login-form").reset();
+      $("login-error").textContent = "";
+    }
+
+    $("logout-btn").addEventListener("click", logout);
+
+    function showPage(page) {
+      const isOverview = page === "overview";
+
+      $("overview-page").classList.toggle("hidden", !isOverview);
+      $("manage-page").classList.toggle("hidden", isOverview);
+
+      $("page-title").textContent =
+        isOverview ? "Dashboard" : "Manage Products";
+
+      document.querySelectorAll(".nav-btn[data-page]")
+        .forEach(button => {
+          button.classList.toggle(
+            "active",
+            button.dataset.page === page
+          );
+        });
+    }
+
+    document.querySelectorAll(".nav-btn[data-page]")
+      .forEach(button => {
+        button.addEventListener("click", () => {
+          showPage(button.dataset.page);
+        });
+      });
+
+    $("go-manage").addEventListener("click", () => {
+      showPage("manage");
+    });
+
+    $("product-form").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const id = $("edit-id").value;
+      const name = $("product-name").value.trim();
+      const price = Number($("product-price").value);
+      const stock = Number($("product-stock").value);
+      const image = $("product-image").value.trim();
+
+      if (!name || !Number.isFinite(price) ||
+          price <= 0 || !Number.isInteger(stock) || stock < 0) {
+        $("form-message").textContent =
+          "সঠিক নাম, দাম এবং স্টক সংখ্যা লিখো।";
+        return;
+      }
+
+      if (image) {
+        try {
+          const url = new URL(image);
+          if (!["http:", "https:"].includes(url.protocol)) {
+            throw new Error("Invalid image URL");
+          }
+        } catch (error) {
+          $("form-message").textContent =
+            "সঠিক ছবির URL দাও।";
+          return;
+        }
+      }
+
+      const previous = products;
+
+      if (id) {
+        products = products.map(product =>
+          product.id === id
+            ? { ...product, name, price, stock, image }
+            : product
+        );
+      } else {
+        products = [
+          ...products,
+          {
+            id: Date.now().toString() +
+                Math.random().toString(36).slice(2, 8),
+            name,
+            price,
+            stock,
+            image
+          }
+        ];
+      }
+
+      if (!saveProducts()) {
+        products = previous;
+        return;
+      }
+
+      $("form-message").textContent =
+        id ? "প্রোডাক্ট আপডেট হয়েছে!" : "নতুন প্রোডাক্ট যোগ হয়েছে!";
+
+      resetForm();
+      renderProducts();
+    });
+
+    function editProduct(id) {
+      const product = products.find(p => p.id === id);
+      if (!product) return;
+
+      $("edit-id").value = product.id;
+      $("product-name").value = product.name;
+      $("product-price").value = product.price;
+      $("product-stock").value = product.stock;
+      $("product-image").value = product.image || "";
+
+      $("form-title").textContent = "✏️ প্রোডাক্ট সম্পাদনা";
+      $("save-btn").textContent = "পরিবর্তন সেভ করো";
+      $("cancel-edit").classList.remove("hidden");
+      $("form-message").textContent = "";
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function deleteProduct(id) {
+      const product = products.find(p => p.id === id);
+      if (!product) return;
+
+      if (!confirm(`"${product.name}" ডিলিট করতে চাও?`)) {
+        return;
+      }
+
+      const previous = products;
+      products = products.filter(p => p.id !== id);
+
+      if (!saveProducts()) {
+        products = previous;
+        return;
+      }
+
+      if ($("edit-id").value === id) resetForm();
+
+      $("form-message").textContent = "প্রোডাক্ট ডিলিট হয়েছে।";
+      renderProducts();
+    }
+
+    function resetForm() {
+      $("product-form").reset();
+      $("edit-id").value = "";
+      $("product-stock").value = 1;
+      $("form-title").textContent = "➕ নতুন প্রোডাক্ট যোগ করো";
+      $("save-btn").textContent = "প্রোডাক্ট সেভ করো";
+      $("cancel-edit").classList.add("hidden");
+    }
+
+    $("cancel-edit").addEventListener("click", resetForm);
+
+    function renderProducts() {
+      const list = $("product-list");
+      list.replaceChildren();
+
+      $("empty-message").classList.toggle(
+        "hidden", products.length !== 0
+      );
+
+      products.forEach(product => {
+        const row = document.createElement("tr");
+
+        const nameCell = document.createElement("td");
+        nameCell.textContent = product.name;
+
+        const priceCell = document.createElement("td");
+        priceCell.textContent = money(product.price);
+
+        const stockCell = document.createElement("td");
+        stockCell.textContent = product.stock;
+
+        const actionCell = document.createElement("td");
+        const actions = document.createElement("div");
+        actions.className = "actions";
+
+        const editButton = document.createElement("button");
+        editButton.className = "btn edit";
+        editButton.textContent = "Edit";
+        editButton.addEventListener("click", () => {
+          editProduct(product.id);
+        });
+
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "btn delete";
+        deleteButton.textContent = "Delete";
+        deleteButton.addEventListener("click", () => {
+          deleteProduct(product.id);
+        });
+
+        actions.append(editButton, deleteButton);
+        actionCell.appendChild(actions);
+        row.append(nameCell, priceCell, stockCell, actionCell);
+        list.appendChild(row);
+      });
+
+      $("product-count").textContent = products.length;
+
+      const totalStock = products.reduce(
+        (sum, p) => sum + p.stock, 0
+      );
+
+      const totalValue = products.reduce(
+        (sum, p) => sum + p.price * p.stock, 0
+      );
+
+      $("stock-count").textContent = totalStock;
+      $("inventory-value").textContent = money(totalValue);
+    }
+  </script>
+
+</body>
+</html>
