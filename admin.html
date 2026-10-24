@@ -473,7 +473,54 @@
     </main>
   </div>
 
-  <script>
+  <script type="module">
+    import { database } from "./firebase.js";
+import {
+    ref,
+    set,
+    get,
+    onValue,
+    remove
+} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+    import {
+  getAuth,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+
+import { app } from "./firebase.js";
+
+const auth = getAuth(app);
+    $("login-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const email = $("mdsalmanhossen388@gmail.com").value.trim();
+  const password = $("@Salman9544@").value;
+  const errorBox = $("login-error");
+
+  errorBox.textContent = "";
+
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+  } catch (error) {
+    errorBox.textContent =
+      "লগইন হয়নি। Firebase-এ দেওয়া ইমেইল ও পাসওয়ার্ড পরীক্ষা করো।";
+  }
+});
+
+onAuthStateChanged(auth, (user) => {
+  const loginPage = $("login-page");
+  const adminPanel = $("admin-panel");
+
+  if (user && user.uid === "cx3TM4XiF6StOMMKv3dER0pbG1v1") {
+    loginPage.classList.add("hidden");
+    adminPanel.classList.remove("hidden");
+  } else {
+    loginPage.classList.remove("hidden");
+    adminPanel.classList.add("hidden");
+  }
+});
     /*
       DEMO ONLY:
       Browser-side login is not secure for a real website.
