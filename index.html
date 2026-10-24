@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bn">
+< lang="bn">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -223,6 +223,9 @@
         padding: 15px;
       }
     }
+    .hidden {
+  display: none !important;
+      }
   </style>
 </head>
 
@@ -401,134 +404,215 @@
         const button = document.createElement("button");
         button.className = "buy-btn";
         button.textContent = product.stock > 0
-          ? "কার্টে যোগ করুন"
-          : "স্টক শেষ";
+     <script type="module">
+  import { database } from "./firebase.js";
+  import {
+    ref,
+    onValue
+  } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
 
-        button.disabled = product.stock <= 0;
+  let products = [];
+  let cart = [];
 
-        button.addEventListener("click", () => {
-          addToCart(product.id);
-        });
+  function money(amount) {
+    return "৳ " + Number(amount).toLocaleString("en-BD");
+  }
 
-        card.append(img, name, price, stock, button);
-        grid.appendChild(card);
-      });
+  function renderProducts() {
+    const grid = document.getElementById("product-grid");
+    const empty = document.getElementById("empty-products");
+    const query = document.getElementById("search").value.trim().toLowerCase();
+
+    grid.replaceChildren();
+
+    const filtered = products.filter(p =>
+      String(p.name || "").toLowerCase().includes(query)
+    );
+
+    empty.classList.toggle("hidden", filtered.length !== 0);
+
+    if (products.length === 0) {
+      empty.textContent = "এখনো কোনো প্রোডাক্ট যোগ করা হয়নি।";
+    } else if (filtered.length === 0) {
+      empty.textContent = "কোনো প্রোডাক্ট পাওয়া যায়নি।";
     }
 
-    function addToCart(id) {
-      // Read the latest products before adding an item.
-      loadProducts();
+    filtered.forEach(product => {
+      const card = document.createElement("article");
+      card.className = "product";
 
-      const product = products.find(p => p.id === id);
+      const img = document.createElement("img");
+      img.alt = product.name || "Gadget";
+      img.loading = "lazy";
+      img.src = product.image ||
+        "https://placehold.co/300x220/e8f5f2/172033?text=Gadget";
+      img.onerror = function() {
+        this.onerror = null;
+        this.src = "https://placehold.co/300x220/e8f5f2/172033?text=Gadget";
+      };
 
-      if (!product || product.stock <= 0) {
-        alert("এই প্রোডাক্টটি এখন পাওয়া যাচ্ছে না।");
+      const name = document.createElement("h3");
+      name.textContent = product.name || "নাম নেই";
+
+      const price = document.createElement("p");
+      price.className = "price";
+      price.textContent = money(product.price);
+
+      const stock = document.createElement("p");
+      stock.className = "stock";
+      stock.textContent = Number(product.stock) > 0
+        ? "স্টকে আছে: " + product.stock + " টি"
+        : "স্টক শেষ";
+
+      const button = document.createElement("button");
+      button.className = "buy-btn";
+      button.textContent = Number(product.stock) > 0
+        ? "কার্টে যোগ করুন"
+        : "স্টক শেষ";
+      button.disabled = Number(product.stock) <= 0;
+
+      button.addEventListener("click", () => addToCart(product.id));
+
+      card.append(img, name, price, stock, button);
+      grid.appendChild(card);
+    });
+  }
+
+  function addToCart(id) {
+    const product = products.find(p => String(p.id) === String(id));
+
+    if (!product || Number(product.stock) <= 0) {
+      alert("এই প্রোডাক্টটি এখন পাওয়া যাচ্ছে না।");
+      return;
+    }
+
+    const existing = cart.find(item => String(item.id) === String(id));
+
+    if (existing) {
+      if (existing.quantity >= Number(product.stock)) {
+        alert("এর বেশি স্টক নেই।");
         return;
       }
-
-      const existing = cart.find(item => item.id === id);
-
-      if (existing) {
-        if (existing.quantity >= product.stock) {
-          alert("দুঃখিত, এর বেশি স্টক নেই।");
-          return;
-        }
-
-        existing.quantity++;
-      } else {
-        cart.push({ id: id, quantity: 1 });
-      }
-
-      renderCart();
+      existing.quantity++;
+    } else {
+      cart.push({ id, quantity: 1 });
     }
 
-    function removeFromCart(id) {
-      cart = cart.filter(item => item.id !== id);
-      renderCart();
+    renderCart();
+  }
+
+  function removeFromCart(id) {
+    cart = cart.filter(item => String(item.id) !== String(id));
+    renderCart();
+  }
+
+  function renderCart() {
+    const container = document.getElementById("cart-items");
+    container.replaceChildren();
+
+    let count = 0;
+    let total = 0;
+
+    cart.forEach(item => {
+      const product = products.find(p => String(p.id) === String(item.id));
+      if (!product) return;
+
+      count += item.quantity;
+      total += Number(product.price) * item.quantity;
+
+      const row = document.createElement("div");
+      row.className = "cart-item";
+
+      const details = document.createElement("span");
+      details.textContent = product.name + " × " + item.quantity +
+        " — " + money(Number(product.price) * item.quantity);
+
+      const remove = document.createElement("button");
+      remove.className = "remove-btn";
+      remove.textContent = "মুছুন";
+      remove.addEventListener("click", () => removeFromCart(item.id));
+
+      row.append(details, remove);
+      container.appendChild(row);
+    });
+
+    if (count === 0) {
+      container.className = "empty";
+      container.textContent = "তোমার কার্ট এখন খালি।";
+    } else {
+      container.className = "";
     }
 
-    function renderCart() {
-      const container = document.getElementById("cart-items");
-      container.replaceChildren();
+    document.getElementById("cart-count").textContent = count;
+    document.getElementById("total").textContent = money(total);
+  }
 
-      let count = 0;
-      let total = 0;
-
-      cart.forEach(item => {
-        const product = products.find(p => p.id === item.id);
-        if (!product) return;
-
-        count += item.quantity;
-        total += product.price * item.quantity;
-
-        const row = document.createElement("div");
-        row.className = "cart-item";
-
-        const details = document.createElement("span");
-        details.textContent =
-          product.name + " × " + item.quantity +
-          " — " + money(product.price * item.quantity);
-
-        const remove = document.createElement("button");
-        remove.className = "remove-btn";
-        remove.textContent = "মুছুন";
-        remove.addEventListener("click", () => {
-          removeFromCart(item.id);
-        });
-
-        row.append(details, remove);
-        container.appendChild(row);
-      });
-
-      if (count === 0) {
-        container.className = "empty";
-        container.textContent = "তোমার কার্ট এখন খালি।";
-      } else {
-        container.className = "";
-      }
-
-      document.getElementById("cart-count").textContent = count;
-      document.getElementById("total").textContent = money(total);
+  function checkout() {
+    if (cart.length === 0) {
+      alert("প্রথমে কার্টে একটি প্রোডাক্ট যোগ করো।");
+      return;
     }
 
-    function checkout() {
-      if (cart.length === 0) {
-        alert("প্রথমে কার্টে একটি প্রোডাক্ট যোগ করো।");
-        return;
-      }
+    let message = "তোমার অর্ডারের তালিকা:\n\n";
 
-      let message = "তোমার অর্ডারের তালিকা:\n\n";
-
-      cart.forEach(item => {
-        const product = products.find(p => p.id === item.id);
-        if (product) {
-          message += product.name + " × " + item.quantity +
-            " = " + money(product.price * item.quantity) + "\n";
-        }
-      });
-
-      const total = cart.reduce((sum, item) => {
-        const product = products.find(p => p.id === item.id);
-        return sum + (product ? product.price * item.quantity : 0);
-      }, 0);
-
-      message += "\nমোট: " + money(total);
-      message += "\n\nএটি ডেমো কার্ট। অর্ডার পাঠানোর সার্ভার এখনো যুক্ত হয়নি।";
-
-      alert(message);
-    }
-
-    // Update the product list when admin changes data
-    // in another tab of the same browser origin.
-    window.addEventListener("storage", event => {
-      if (event.key === STORAGE_KEY || event.key === null) {
-        loadProducts();
+    cart.forEach(item => {
+      const product = products.find(p => String(p.id) === String(item.id));
+      if (product) {
+        message += product.name + " × " + item.quantity +
+          " = " + money(Number(product.price) * item.quantity) + "\n";
       }
     });
 
-    // Initial page load
-    loadProducts();
-  </script>
+    const total = cart.reduce((sum, item) => {
+      const product = products.find(p => String(p.id) === String(item.id));
+      return sum + (product ? Number(product.price) * item.quantity : 0);
+    }, 0);
 
+    message += "\nমোট: " + money(total);
+    message += "\n\nএটি ডেমো কার্ট; অর্ডার পাঠানোর ব্যবস্থা এখনো যুক্ত হয়নি।";
+    alert(message);
+  }
+
+  document.getElementById("search").addEventListener("input", renderProducts);
+
+  // HTML-এর onclick থেকে checkout() ও ব্যবহারযোগ্য রাখা
+  window.checkout = checkout;
+
+  // Firebase Realtime Database থেকে পণ্য পড়া
+  onValue(ref(database, "products"), snapshot => {
+    const data = snapshot.val();
+
+    if (Array.isArray(data)) {
+      products = data.filter(Boolean);
+    } else if (data && typeof data === "object") {
+      products = Object.values(data).filter(Boolean);
+    } else {
+      products = [];
+    }
+
+    cart = cart.filter(item =>
+      products.some(p => String(p.id) === String(item.id))
+    );
+
+    cart.forEach(item => {
+      const product = products.find(p => String(p.id) === String(item.id));
+      if (product) {
+        item.quantity = Math.min(item.quantity, Number(product.stock) || 0);
+      }
+    });
+
+    cart = cart.filter(item => item.quantity > 0);
+
+    renderProducts();
+    renderCart();
+  }, error => {
+    console.error("Firebase products error:", error);
+    document.getElementById("empty-products").classList.remove("hidden");
+    document.getElementById("empty-products").textContent =
+      "পণ্য লোড করা যায়নি। Firebase Database Rules ও সংযোগ পরীক্ষা করো।";
+  });
+
+  renderCart();
+</script>
 </body>
 </html>
