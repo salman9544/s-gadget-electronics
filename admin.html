@@ -3,637 +3,543 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111827">
   <title>Admin Panel | S Gadget & Electronics</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
+    * { box-sizing: border-box; }
 
     body {
-      background: #f1f5f9;
-      color: #172033;
+      margin: 0;
+      font-family: Arial, "Noto Sans Bengali", sans-serif;
+      background: #f3f4f6;
+      color: #111827;
     }
 
-    button, input {
-      font: inherit;
-    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
 
-    button {
-      cursor: pointer;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .login-page {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      background: linear-gradient(135deg, #101b35, #155e75);
-    }
-
-    .login-box {
-      background: white;
-      width: 100%;
-      max-width: 380px;
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 15px 40px #0003;
-    }
-
-    .logo {
-      color: #087f70;
-      text-align: center;
-      margin-bottom: 8px;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: #64748b;
-      margin-bottom: 25px;
-    }
-
-    label {
-      display: block;
-      margin: 14px 0 7px;
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    input {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      outline: none;
-      background: white;
-    }
-
-    input:focus {
-      border-color: #0d9488;
-    }
-
-    .btn {
-      border: none;
-      padding: 11px 15px;
-      border-radius: 7px;
-      background: #0d9488;
-      color: white;
-      font-weight: bold;
-    }
-
-    .btn:hover {
-      opacity: 0.9;
-    }
-
-    .full {
-      width: 100%;
-      margin-top: 20px;
-    }
-
-    .error {
-      color: #dc2626;
-      margin-top: 12px;
-      font-size: 14px;
-    }
-
-    .layout {
-      min-height: 100vh;
-      display: flex;
-    }
-
-    aside {
-      width: 230px;
-      flex-shrink: 0;
-      background: #101b35;
-      color: white;
-      padding: 24px 15px;
-    }
-
-    aside h2 {
-      color: #36d7b7;
-      font-size: 20px;
-      margin-bottom: 7px;
-    }
-
-    aside p {
-      color: #cbd5e1;
-      font-size: 12px;
-      margin-bottom: 30px;
-    }
-
-    .nav-btn {
-      width: 100%;
-      padding: 13px;
-      text-align: left;
-      border: none;
-      background: transparent;
-      color: white;
-      border-radius: 8px;
-      margin-bottom: 8px;
-    }
-
-    .nav-btn:hover,
-    .nav-btn.active {
-      background: #263653;
-    }
-
-    main {
-      flex: 1;
-      min-width: 0;
-      padding: 25px;
-    }
+    .hidden { display: none !important; }
 
     .topbar {
+      background: #111827;
+      color: white;
+      padding: 18px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
       gap: 12px;
-      margin-bottom: 25px;
+      flex-wrap: wrap;
     }
 
-    .topbar h1 {
-      font-size: 24px;
+    .topbar h2 { margin: 0; font-size: 20px; }
+    .topbar p { margin: 6px 0 0; color: #d1d5db; font-size: 13px; }
+
+    .container {
+      width: min(100% - 24px, 1000px);
+      margin: 22px auto;
     }
 
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 15px;
-      margin-bottom: 25px;
-    }
-
-    .stat-card, .panel {
+    .card {
       background: white;
-      border-radius: 12px;
       padding: 20px;
-      box-shadow: 0 3px 12px #00000008;
+      border-radius: 14px;
+      box-shadow: 0 3px 14px #0000000c;
+      margin-bottom: 18px;
     }
 
-    .stat-card p {
-      color: #64748b;
-      margin-bottom: 12px;
+    .login-card {
+      max-width: 430px;
+      margin: 65px auto;
     }
 
-    .stat-card h2 {
-      font-size: 25px;
-      color: #087f70;
+    h1 { font-size: 23px; margin-top: 0; }
+    h3 { margin-top: 0; }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      margin: 14px 0 7px;
+    }
+
+    input {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      background: white;
+      color: #111827;
+    }
+
+    input:focus {
+      outline: 2px solid #93c5fd;
+      border-color: #2563eb;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 8px;
+      padding: 11px 15px;
+      font-weight: bold;
+    }
+
+    .primary { background: #2563eb; color: white; }
+    .danger { background: #dc2626; color: white; }
+    .secondary { background: #374151; color: white; }
+    .full { width: 100%; margin-top: 18px; }
+
+    .message {
+      margin-top: 12px;
+      font-size: 14px;
       overflow-wrap: anywhere;
     }
 
-    .panel h2 {
-      font-size: 19px;
-      margin-bottom: 20px;
+    .error { color: #b91c1c; }
+    .success { color: #047857; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
     }
 
-    .form-grid {
+    .stat {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 3px 14px #0000000c;
+    }
+
+    .stat span { color: #6b7280; font-size: 13px; }
+    .stat strong { display: block; font-size: 24px; margin-top: 8px; }
+
+    .grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0 15px;
+      gap: 14px;
     }
 
-    .form-grid .wide {
-      grid-column: 1 / -1;
+    .product {
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 13px;
+      min-width: 0;
     }
 
-    .form-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 18px;
-    }
-
-    .secondary {
-      background: #64748b;
-    }
-
-    .table-wrap {
-      overflow-x: auto;
-    }
-
-    table {
-      border-collapse: collapse;
+    .product img {
       width: 100%;
-      min-width: 540px;
+      height: 155px;
+      object-fit: contain;
+      background: #f9fafb;
+      border-radius: 8px;
     }
 
-    th, td {
-      padding: 13px 10px;
-      border-bottom: 1px solid #e2e8f0;
-      text-align: left;
-      font-size: 14px;
+    .product h4 {
+      margin: 12px 0 8px;
+      overflow-wrap: anywhere;
     }
 
-    th {
-      background: #f8fafc;
-    }
-
-    .actions {
-      display: flex;
-      gap: 7px;
-    }
-
-    .edit {
-      background: #2563eb;
-      padding: 7px 10px;
-    }
-
-    .delete {
-      background: #dc2626;
-      padding: 7px 10px;
-    }
-
-    .notice {
-      margin-top: 15px;
-      font-size: 13px;
-      color: #64748b;
-      line-height: 1.7;
-    }
+    .product p { margin: 6px 0; font-size: 14px; }
+    .product-actions { display: flex; gap: 8px; margin-top: 12px; }
+    .product-actions button { flex: 1; padding: 9px 6px; }
 
     .empty {
-      padding: 20px 0;
-      color: #64748b;
+      text-align: center;
+      padding: 24px 10px;
+      color: #6b7280;
     }
 
-    @media (max-width: 760px) {
-      .layout {
-        display: block;
-      }
+    .muted { color: #6b7280; font-size: 13px; }
+    .status { font-size: 13px; color: #d1d5db; }
 
-      aside {
-        width: 100%;
-        padding: 17px;
-      }
-
-      aside p {
-        margin-bottom: 15px;
-      }
-
-      .nav-btn {
-        width: auto;
-        margin: 0 4px 4px 0;
-        padding: 10px;
-      }
-
-      main {
-        padding: 16px;
-      }
-
-      .cards {
-        grid-template-columns: 1fr;
-      }
-
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .form-grid .wide {
-        grid-column: auto;
-      }
-
-      .topbar h1 {
-        font-size: 21px;
-      }
+    @media (max-width: 480px) {
+      .stats { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: 1fr; }
+      .card { padding: 15px; }
+      .login-card { margin-top: 35px; }
     }
   </style>
 </head>
 
 <body>
+  <header class="topbar">
+    <div>
+      <h2>🛍️ S Gadget & Electronics</h2>
+      <p>অ্যাডমিন কন্ট্রোল প্যানেল</p>
+    </div>
+    <div id="connection-status" class="status">প্রস্তুত হচ্ছে...</div>
+    <button id="logout-btn" class="btn danger hidden" type="button">
+      লগআউট
+    </button>
+  </header>
 
-  <!-- ADMIN LOGIN -->
-  <section id="login-page" class="login-page">
-    <div class="login-box">
-      <h2 class="logo">S Gadget & Electronics</h2>
-      <p class="subtitle">Administrator Login</p>
+  <!-- Login -->
+  <main id="login-page" class="container">
+    <section class="card login-card">
+      <h1>🔐 অ্যাডমিন লগইন</h1>
+      <p class="muted">শুধু অনুমোদিত অ্যাডমিন প্রবেশ করতে পারবেন।</p>
 
       <form id="login-form">
-        <label for="username">Admin Username</label>
-        <input id="username" autocomplete="username"
-          placeholder="Username" required>
+        <label for="username">Firebase অ্যাকাউন্টের ইমেইল</label>
+        <input
+          id="username"
+          type="email"
+          autocomplete="username"
+          placeholder="তোমার অ্যাডমিন ইমেইল"
+          required
+        >
 
-        <label for="password">Password</label>
-        <input id="password" type="password"
+        <label for="password">পাসওয়ার্ড</label>
+        <input
+          id="password"
+          type="password"
           autocomplete="current-password"
-          placeholder="Password" required>
+          placeholder="পাসওয়ার্ড লিখো"
+          required
+        >
 
-        <button class="btn full" type="submit">Login</button>
-        <p id="login-error" class="error" role="alert"></p>
+        <button class="btn primary full" type="submit" id="login-btn">
+          লগইন করো
+        </button>
+        <p id="login-error" class="message error" role="alert"></p>
       </form>
-    </div>
-  </section>
+    </section>
+  </main>
 
-  <!-- ADMIN DASHBOARD -->
-  <div id="dashboard" class="layout hidden">
-
-    <aside>
-      <h2>S Gadget</h2>
-      <p>Admin Control Panel</p>
-
-      <button class="nav-btn active" data-page="overview">
-        📊 Dashboard
-      </button>
-
-      <button class="nav-btn" data-page="manage">
-        📦 Manage Products
-      </button>
-
-      <button class="nav-btn" id="logout-btn">
-        🚪 Logout
-      </button>
-    </aside>
-
-    <main>
-      <div class="topbar">
-        <div>
-          <h1 id="page-title">Dashboard</h1>
-          <p style="color:#64748b;margin-top:7px">
-            S Gadget & Electronics Management
-          </p>
-        </div>
-        <span>👤 Administrator</span>
+  <!-- Dashboard -->
+  <main id="dashboard" class="container hidden">
+    <section class="stats">
+      <div class="stat">
+        <span>মোট পণ্য</span>
+        <strong id="total-products">0</strong>
       </div>
+      <div class="stat">
+        <span>মোট স্টক</span>
+        <strong id="total-stock">0</strong>
+      </div>
+      <div class="stat">
+        <span>স্টক শেষ</span>
+        <strong id="out-of-stock">0</strong>
+      </div>
+    </section>
 
-      <!-- OVERVIEW -->
-      <section id="overview-page">
-        <div class="cards">
-          <div class="stat-card">
-            <p>মোট প্রোডাক্ট</p>
-            <h2 id="product-count">0</h2>
-          </div>
+    <section class="card">
+      <h3 id="form-title">➕ নতুন পণ্য যোগ করো</h3>
 
-          <div class="stat-card">
-            <p>মোট ইউনিট স্টক</p>
-            <h2 id="stock-count">0</h2>
-          </div>
+      <form id="product-form">
+        <input id="edit-id" type="hidden">
 
-          <div class="stat-card">
-            <p>প্রোডাক্টের মোট মূল্য</p>
-            <h2 id="inventory-value">৳ 0</h2>
-          </div>
-        </div>
+        <label for="product-name">পণ্যের নাম</label>
+        <input
+          id="product-name"
+          type="text"
+          maxlength="120"
+          placeholder="যেমন: Wireless Headphone"
+          required
+        >
 
-        <div class="panel">
-          <h2>স্বাগতম, Admin!</h2>
-          <p>
-            এই প্যানেল থেকে প্রোডাক্ট যোগ, সম্পাদনা ও ডিলিট করতে পারবে।
-          </p>
-          <button class="btn" style="margin-top:18px"
-            id="go-manage">
-            প্রোডাক্ট ম্যানেজ করো
-          </button>
-        </div>
-      </section>
+        <label for="product-price">দাম (৳)</label>
+        <input
+          id="product-price"
+          type="number"
+          min="0.01"
+          step="0.01"
+          placeholder="যেমন: 1500"
+          required
+        >
 
-      <!-- PRODUCT MANAGEMENT -->
-      <section id="manage-page" class="hidden">
+        <label for="product-stock">স্টকের সংখ্যা</label>
+        <input
+          id="product-stock"
+          type="number"
+          min="0"
+          step="1"
+          value="1"
+          required
+        >
 
-        <div class="panel" style="margin-bottom:22px">
-          <h2 id="form-title">➕ নতুন প্রোডাক্ট যোগ করো</h2>
+        <label for="product-image">ছবির URL (ঐচ্ছিক)</label>
+        <input
+          id="product-image"
+          type="url"
+          placeholder="https://example.com/image.jpg"
+        >
 
-          <form id="product-form">
-            <input id="edit-id" type="hidden">
+        <button class="btn primary full" type="submit" id="save-btn">
+          পণ্য সেভ করো
+        </button>
 
-            <div class="form-grid">
-              <div>
-                <label for="product-name">প্রোডাক্টের নাম</label>
-                <input id="product-name"
-                  placeholder="যেমন: Smart Watch" required>
-              </div>
+        <button
+          class="btn secondary full hidden"
+          type="button"
+          id="cancel-edit"
+        >
+          সম্পাদনা বাতিল
+        </button>
 
-              <div>
-                <label for="product-price">দাম (টাকা)</label>
-                <input id="product-price" type="number"
-                  min="0.01" step="0.01"
-                  placeholder="যেমন: 1800" required>
-              </div>
+        <p id="form-message" class="message" role="status"></p>
+      </form>
+    </section>
 
-              <div>
-                <label for="product-stock">স্টক সংখ্যা</label>
-                <input id="product-stock" type="number"
-                  min="0" step="1" value="1" required>
-              </div>
-
-              <div class="wide">
-                <label for="product-image">ছবির URL</label>
-                <input id="product-image" type="url"
-                  placeholder="https://example.com/image.jpg">
-              </div>
-            </div>
-
-            <div class="form-actions">
-              <button type="submit" class="btn" id="save-btn">
-                প্রোডাক্ট সেভ করো
-              </button>
-
-              <button type="button" class="btn secondary hidden"
-                id="cancel-edit">
-                বাতিল
-              </button>
-            </div>
-          </form>
-
-          <p id="form-message" class="notice" role="status"></p>
-        </div>
-
-        <div class="panel">
-          <h2>📦 প্রোডাক্ট তালিকা</h2>
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>নাম</th>
-                  <th>দাম</th>
-                  <th>স্টক</th>
-                  <th>অ্যাকশন</th>
-                </tr>
-              </thead>
-              <tbody id="product-list"></tbody>
-            </table>
-          </div>
-
-          <p id="empty-message" class="empty hidden">
-            এখনো কোনো প্রোডাক্ট যোগ করা হয়নি।
-          </p>
-
-          <p class="notice">
-            নোট: এই সংস্করণে ডেটা এই ব্রাউজারের localStorage-এ
-            রাখা হয়। এটি SQL Database নয়।
-          </p>
-        </div>
-      </section>
-    </main>
-  </div>
+    <section class="card">
+      <h3>📦 পণ্যের তালিকা</h3>
+      <p class="muted">পণ্যের পরিবর্তন Firebase থেকে স্বয়ংক্রিয়ভাবে আপডেট হবে।</p>
+      <div id="products-list" class="grid">
+        <p class="empty">পণ্য লোড হচ্ছে...</p>
+      </div>
+    </section>
+  </main>
 
   <script type="module">
-    import { database } from "./firebase.js";
-import {
-    ref,
-    set,
-    get,
-    onValue,
-    remove
-} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+    import { app, database } from "./firebase.js";
+
     import {
-  getAuth,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+      getAuth,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
-import { app } from "./firebase.js";
+    import {
+      ref,
+      set,
+      onValue
+    } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
 
-const auth = getAuth(app);
-    $("login-form").addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  const email = $("mdsalmanhossen388@gmail.com").value.trim();
-  const password = $("@Salman9544@").value;
-  const errorBox = $("login-error");
-
-  errorBox.textContent = "";
-
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-  } catch (error) {
-  errorBox.textContent =
-    "Login Error: " + error.code;
-  console.log(error);
-    }
-});
-
-onAuthStateChanged(auth, (user) => {
-  const loginPage = $("login-page");
-  const adminPanel = $("admin-panel");
-
-  if (user && user.uid === "cx3TM4XiF6StOMMKv3dER0pbG1v1") {
-    loginPage.classList.add("hidden");
-    adminPanel.classList.remove("hidden");
-  } else {
-    loginPage.classList.remove("hidden");
-    adminPanel.classList.add("hidden");
-  }
-});
-    /*
-      DEMO ONLY:
-      Browser-side login is not secure for a real website.
-      Never use this method for production authentication.
-    */
-
-    const DEMO_USERNAME = "SalmanAdmin";
-    const DEMO_PASSWORD = "Admin1234";
-
-    const STORAGE_KEY = "sgadget_products_v1";
-
+    const ADMIN_UID = "cx3TM4XiF6StOMMKv3dER0pbG1v1";
+    const auth = getAuth(app);
     const $ = id => document.getElementById(id);
 
-    let products = loadProducts();
+    let products = [];
+    let unsubscribeProducts = null;
+    let busy = false;
 
-    function loadProducts() {
-      try {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        const parsed = saved ? JSON.parse(saved) : [];
+    const productRef = ref(database, "products");
 
-        if (!Array.isArray(parsed)) return [];
-
-        return parsed.filter(p =>
-          p &&
-          typeof p.id === "string" &&
-          typeof p.name === "string" &&
-          Number.isFinite(p.price) &&
-          Number.isFinite(p.stock)
-        );
-      } catch (error) {
-        return [];
-      }
+    function showMessage(id, message, type = "") {
+      const element = $(id);
+      element.textContent = message;
+      element.className = "message " + type;
     }
 
-    function saveProducts() {
-      try {
-        localStorage.setItem(
-          STORAGE_KEY,
-          JSON.stringify(products)
-        );
-        return true;
-      } catch (error) {
-        alert("ডেটা সেভ করা যায়নি। ব্রাউজারের স্টোরেজ পরীক্ষা করো।");
-        return false;
-      }
+    function setConnection(message) {
+      $("connection-status").textContent = message;
+    }
+
+    function validProduct(product) {
+      return product &&
+        typeof product.id === "string" &&
+        typeof product.name === "string" &&
+        product.name.trim().length > 0 &&
+        Number.isFinite(Number(product.price)) &&
+        Number(product.price) > 0 &&
+        Number.isFinite(Number(product.stock)) &&
+        Number(product.stock) >= 0;
     }
 
     function money(amount) {
-      return "৳ " + amount.toLocaleString("en-BD");
+      return "৳" + Number(amount).toLocaleString("en-BD", {
+        maximumFractionDigits: 2
+      });
     }
 
-    $("login-form").addEventListener("submit", function(event) {
+    function renderProducts() {
+      $("total-products").textContent = products.length;
+
+      $("total-stock").textContent = products.reduce(
+        (sum, p) => sum + Number(p.stock || 0), 0
+      );
+
+      $("out-of-stock").textContent = products.filter(
+        p => Number(p.stock) === 0
+      ).length;
+
+      const list = $("products-list");
+      list.replaceChildren();
+
+      if (products.length === 0) {
+        const empty = document.createElement("p");
+        empty.className = "empty";
+        empty.textContent = "এখনও কোনো পণ্য যোগ করা হয়নি।";
+        list.appendChild(empty);
+        return;
+      }
+
+      products.forEach(product => {
+        const card = document.createElement("article");
+        card.className = "product";
+
+        if (product.image) {
+          const img = document.createElement("img");
+          img.src = product.image;
+          img.alt = product.name;
+          img.loading = "lazy";
+          img.onerror = () => img.remove();
+          card.appendChild(img);
+        }
+
+        const name = document.createElement("h4");
+        name.textContent = product.name;
+        card.appendChild(name);
+
+        const price = document.createElement("p");
+        price.textContent = "দাম: " + money(product.price);
+        card.appendChild(price);
+
+        const stock = document.createElement("p");
+        stock.textContent = "স্টক: " + product.stock;
+        card.appendChild(stock);
+
+        const actions = document.createElement("div");
+        actions.className = "product-actions";
+
+        const editButton = document.createElement("button");
+        editButton.type = "button";
+        editButton.className = "btn primary";
+        editButton.textContent = "এডিট";
+        editButton.addEventListener("click", () => editProduct(product.id));
+
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.className = "btn danger";
+        deleteButton.textContent = "ডিলিট";
+        deleteButton.addEventListener("click", () => deleteProduct(product.id));
+
+        actions.append(editButton, deleteButton);
+        card.appendChild(actions);
+        list.appendChild(card);
+      });
+    }
+
+    async function saveProducts() {
+      // Only the authorized admin should call this function.
+      if (!auth.currentUser || auth.currentUser.uid !== ADMIN_UID) {
+        throw new Error("admin-not-authorized");
+      }
+
+      await set(productRef, products);
+    }
+
+    function listenToProducts() {
+      if (unsubscribeProducts) {
+        unsubscribeProducts();
+        unsubscribeProducts = null;
+      }
+
+      setConnection("Firebase সংযোগ হচ্ছে...");
+
+      unsubscribeProducts = onValue(
+        productRef,
+        snapshot => {
+          const data = snapshot.val();
+
+          const entries = Array.isArray(data)
+            ? data
+            : data && typeof data === "object"
+              ? Object.values(data)
+              : [];
+
+          products = entries
+            .filter(validProduct)
+            .map(p => ({
+              ...p,
+              price: Number(p.price),
+              stock: Number(p.stock)
+            }));
+
+          renderProducts();
+          setConnection("🟢 Firebase সংযুক্ত");
+        },
+        error => {
+          console.error("Firebase read error:", error);
+          setConnection("🔴 ডেটা লোড হয়নি");
+          showMessage(
+            "form-message",
+            "পণ্য লোড করা যায়নি। Firebase Database Rules চেক করো।",
+            "error"
+          );
+        }
+      );
+    }
+
+    $("login-form").addEventListener("submit", async event => {
       event.preventDefault();
 
-      const username = $("username").value.trim();
+      if (busy) return;
+      busy = true;
+      $("login-btn").disabled = true;
+      showMessage("login-error", "");
+
+      const email = $("username").value.trim();
       const password = $("password").value;
 
-      if (
-        username === DEMO_USERNAME &&
-        password === DEMO_PASSWORD
-      ) {
-        $("login-error").textContent = "";
-        $("login-page").classList.add("hidden");
-        $("dashboard").classList.remove("hidden");
-        renderProducts();
-        showPage("overview");
-      } else {
-        $("login-error").textContent =
-          "Username অথবা Password সঠিক নয়!";
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (error) {
+        console.error("Login error:", error);
+        showMessage(
+          "login-error",
+          "লগইন ব্যর্থ হয়েছে। ইমেইল, পাসওয়ার্ড ও Firebase Auth সেটিংস চেক করো।",
+          "error"
+        );
+      } finally {
+        busy = false;
+        $("login-btn").disabled = false;
       }
     });
 
-    function logout() {
+    onAuthStateChanged(auth, async user => {
+      if (user && user.uid === ADMIN_UID) {
+        $("login-page").classList.add("hidden");
+        $("dashboard").classList.remove("hidden");
+        $("logout-btn").classList.remove("hidden");
+        listenToProducts();
+        return;
+      }
+
+      if (unsubscribeProducts) {
+        unsubscribeProducts();
+        unsubscribeProducts = null;
+      }
+
       $("dashboard").classList.add("hidden");
+      $("logout-btn").classList.add("hidden");
       $("login-page").classList.remove("hidden");
-      $("login-form").reset();
-      $("login-error").textContent = "";
-    }
+      setConnection("লগইন প্রয়োজন");
 
-    $("logout-btn").addEventListener("click", logout);
-
-    function showPage(page) {
-      const isOverview = page === "overview";
-
-      $("overview-page").classList.toggle("hidden", !isOverview);
-      $("manage-page").classList.toggle("hidden", isOverview);
-
-      $("page-title").textContent =
-        isOverview ? "Dashboard" : "Manage Products";
-
-      document.querySelectorAll(".nav-btn[data-page]")
-        .forEach(button => {
-          button.classList.toggle(
-            "active",
-            button.dataset.page === page
-          );
-        });
-    }
-
-    document.querySelectorAll(".nav-btn[data-page]")
-      .forEach(button => {
-        button.addEventListener("click", () => {
-          showPage(button.dataset.page);
-        });
-      });
-
-    $("go-manage").addEventListener("click", () => {
-      showPage("manage");
+      if (user) {
+        showMessage("login-error", "এই অ্যাকাউন্টের অ্যাডমিন অনুমতি নেই।", "error");
+        try {
+          await signOut(auth);
+        } catch (error) {
+          console.error("Sign-out error:", error);
+        }
+      }
     });
 
-    $("product-form").addEventListener("submit", function(event) {
+    $("logout-btn").addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+        $("login-form").reset();
+        showMessage("login-error", "");
+      } catch (error) {
+        console.error("Logout error:", error);
+        alert("লগআউট করা যায়নি। আবার চেষ্টা করো।");
+      }
+    });
+
+    $("product-form").addEventListener("submit", async event => {
       event.preventDefault();
+
+      if (busy) return;
+
+      if (!auth.currentUser || auth.currentUser.uid !== ADMIN_UID) {
+        showMessage("form-message", "আগে অ্যাডমিন হিসেবে লগইন করো।", "error");
+        return;
+      }
 
       const id = $("edit-id").value;
       const name = $("product-name").value.trim();
@@ -641,10 +547,12 @@ onAuthStateChanged(auth, (user) => {
       const stock = Number($("product-stock").value);
       const image = $("product-image").value.trim();
 
-      if (!name || !Number.isFinite(price) ||
-          price <= 0 || !Number.isInteger(stock) || stock < 0) {
-        $("form-message").textContent =
-          "সঠিক নাম, দাম এবং স্টক সংখ্যা লিখো।";
+      if (
+        !name ||
+        !Number.isFinite(price) || price <= 0 ||
+        !Number.isInteger(stock) || stock < 0
+      ) {
+        showMessage("form-message", "নাম, দাম ও স্টকের সংখ্যা সঠিকভাবে দাও।", "error");
         return;
       }
 
@@ -654,27 +562,25 @@ onAuthStateChanged(auth, (user) => {
           if (!["http:", "https:"].includes(url.protocol)) {
             throw new Error("Invalid image URL");
           }
-        } catch (error) {
-          $("form-message").textContent =
-            "সঠিক ছবির URL দাও।";
+        } catch {
+          showMessage("form-message", "ছবির সঠিক URL দাও।", "error");
           return;
         }
       }
 
-      const previous = products;
+      const previous = products.map(p => ({ ...p }));
 
       if (id) {
-        products = products.map(product =>
-          product.id === id
-            ? { ...product, name, price, stock, image }
-            : product
+        products = products.map(p =>
+          p.id === id ? { ...p, name, price, stock, image } : p
         );
       } else {
         products = [
           ...products,
           {
-            id: Date.now().toString() +
-                Math.random().toString(36).slice(2, 8),
+            id: (crypto.randomUUID
+              ? crypto.randomUUID()
+              : Date.now().toString() + Math.random().toString(36).slice(2)),
             name,
             price,
             stock,
@@ -683,16 +589,30 @@ onAuthStateChanged(auth, (user) => {
         ];
       }
 
-      if (!saveProducts()) {
+      busy = true;
+      $("save-btn").disabled = true;
+
+      try {
+        await saveProducts();
+        resetForm();
+        showMessage(
+          "form-message",
+          id ? "পণ্য আপডেট হয়েছে!" : "নতুন পণ্য যোগ হয়েছে!",
+          "success"
+        );
+      } catch (error) {
         products = previous;
-        return;
+        renderProducts();
+        console.error("Product save error:", error);
+        showMessage(
+          "form-message",
+          "সেভ হয়নি। ইন্টারনেট, Admin UID ও Firebase Rules চেক করো।",
+          "error"
+        );
+      } finally {
+        busy = false;
+        $("save-btn").disabled = false;
       }
-
-      $("form-message").textContent =
-        id ? "প্রোডাক্ট আপডেট হয়েছে!" : "নতুন প্রোডাক্ট যোগ হয়েছে!";
-
-      resetForm();
-      renderProducts();
     });
 
     function editProduct(id) {
@@ -704,106 +624,52 @@ onAuthStateChanged(auth, (user) => {
       $("product-price").value = product.price;
       $("product-stock").value = product.stock;
       $("product-image").value = product.image || "";
-
-      $("form-title").textContent = "✏️ প্রোডাক্ট সম্পাদনা";
+      $("form-title").textContent = "✏️ পণ্য সম্পাদনা";
       $("save-btn").textContent = "পরিবর্তন সেভ করো";
       $("cancel-edit").classList.remove("hidden");
-      $("form-message").textContent = "";
+      showMessage("form-message", "");
 
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    function deleteProduct(id) {
+    async function deleteProduct(id) {
       const product = products.find(p => p.id === id);
       if (!product) return;
 
-      if (!confirm(`"${product.name}" ডিলিট করতে চাও?`)) {
-        return;
-      }
+      if (!confirm(`"${product.name}" ডিলিট করতে চাও?`)) return;
+      if (busy) return;
 
-      const previous = products;
+      const previous = products.map(p => ({ ...p }));
       products = products.filter(p => p.id !== id);
 
-      if (!saveProducts()) {
+      busy = true;
+
+      try {
+        await saveProducts();
+
+        if ($("edit-id").value === id) resetForm();
+
+        showMessage("form-message", "পণ্য ডিলিট হয়েছে।", "success");
+      } catch (error) {
         products = previous;
-        return;
+        renderProducts();
+        console.error("Product delete error:", error);
+        showMessage("form-message", "ডিলিট হয়নি। Firebase Rules চেক করো।", "error");
+      } finally {
+        busy = false;
       }
-
-      if ($("edit-id").value === id) resetForm();
-
-      $("form-message").textContent = "প্রোডাক্ট ডিলিট হয়েছে।";
-      renderProducts();
     }
 
     function resetForm() {
       $("product-form").reset();
       $("edit-id").value = "";
       $("product-stock").value = 1;
-      $("form-title").textContent = "➕ নতুন প্রোডাক্ট যোগ করো";
-      $("save-btn").textContent = "প্রোডাক্ট সেভ করো";
+      $("form-title").textContent = "➕ নতুন পণ্য যোগ করো";
+      $("save-btn").textContent = "পণ্য সেভ করো";
       $("cancel-edit").classList.add("hidden");
     }
 
     $("cancel-edit").addEventListener("click", resetForm);
-
-    function renderProducts() {
-      const list = $("product-list");
-      list.replaceChildren();
-
-      $("empty-message").classList.toggle(
-        "hidden", products.length !== 0
-      );
-
-      products.forEach(product => {
-        const row = document.createElement("tr");
-
-        const nameCell = document.createElement("td");
-        nameCell.textContent = product.name;
-
-        const priceCell = document.createElement("td");
-        priceCell.textContent = money(product.price);
-
-        const stockCell = document.createElement("td");
-        stockCell.textContent = product.stock;
-
-        const actionCell = document.createElement("td");
-        const actions = document.createElement("div");
-        actions.className = "actions";
-
-        const editButton = document.createElement("button");
-        editButton.className = "btn edit";
-        editButton.textContent = "Edit";
-        editButton.addEventListener("click", () => {
-          editProduct(product.id);
-        });
-
-        const deleteButton = document.createElement("button");
-        deleteButton.className = "btn delete";
-        deleteButton.textContent = "Delete";
-        deleteButton.addEventListener("click", () => {
-          deleteProduct(product.id);
-        });
-
-        actions.append(editButton, deleteButton);
-        actionCell.appendChild(actions);
-        row.append(nameCell, priceCell, stockCell, actionCell);
-        list.appendChild(row);
-      });
-
-      $("product-count").textContent = products.length;
-
-      const totalStock = products.reduce(
-        (sum, p) => sum + p.stock, 0
-      );
-
-      const totalValue = products.reduce(
-        (sum, p) => sum + p.price * p.stock, 0
-      );
-
-      $("stock-count").textContent = totalStock;
-      $("inventory-value").textContent = money(totalValue);
-    }
   </script>
-
 </body>
 </html>
